@@ -1,29 +1,21 @@
 #! /usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
+from flask import jsonify
+
 class RespUtil(object):
 
     @staticmethod
     def ok_response(data=None):
         if data is None:
-            return {
-                'code': 200,
-                'msg': 'OK'
-            }
+            return jsonify(code=200, msg='OK')
         else:
-            return {
-                'code': 200,
-                'msg': 'OK',
-                'data': data
-            }
+            return jsonify(code=200, msg='OK', data=data)
 
 
     @staticmethod
     def error_response(code, msg):
-        return {
-            'code': code,
-            'msg': msg
-        }
+        return jsonify(code=200, msg='OK')
 
     @staticmethod
     def built_user_response(user, seesion_id):

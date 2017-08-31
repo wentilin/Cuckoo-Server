@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
+
 class APIError(Exception):
     def __init__(self, code, data='', msg=''):
         super(APIError, self).__init__(msg)
@@ -22,4 +23,4 @@ class APIPermissionError(APIError):
 
 class APIParamError(APIError):
     def __init__(self, msg=''):
-        super(APIPermissionError, self).__init__(400, msg=msg)
+        super(APIParamError, self).__init__(400, msg=msg)

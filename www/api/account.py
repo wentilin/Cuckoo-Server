@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
-
-from corweb import post
+from . import api
 from services.account_service import AccountService
 from utils.req_util import ReqUtil
 from utils.resp_util import RespUtil
 from utils.string_util import StringUtil
+from flask import request
+from . import auth_required
 
 
 # 验证姓名和手机号是否存在
-@post('/api/v1/account/validate')
-def validate(**kw):
-    ReqUtil.not_null_params('field', 'value', **kw)
-
-    field = int(kw.get('field'))
-    value = kw.get('value')
-
+@api.route('/account/validate', methods=['POST'])
+def validate():
+    req = request.get_json()
+    ReqUtil.not_null_params('field', 'value', **req)
+    field = int(req.get('field'))
+    value = req.get('value')
     # 0-name, 1-phone
     if field == 1:
         if AccountService.user_exist_by_name(value):
@@ -31,13 +31,14 @@ def validate(**kw):
 
 
 # 用户登录
-@post('/api/v1/account/signIn')
-def signin(**kw):
-    ReqUtil.not_null_params('account', 'password', **kw)
+@api.route('/account/signIn', methods=['POST'])
+def signin():
+    req = request.get_json()
+    ReqUtil.not_null_params('account', 'password', **req)
 
-    account = kw.get('account')
-    passwd = kw.get('password')
-    device = kw.get('device', 0)
+    account = req.get('account')
+    passwd = req.get('password')
+    device = req.get('device', 0)
 
     if StringUtil.none_or_empty(account) or StringUtil.none_or_empty(passwd):
         return RespUtil.error_response(401, '账户名和密码不能为空.')
@@ -52,16 +53,17 @@ def signin(**kw):
 
 
 # 用户注册
-@post('/api/v1/account/signUp')
-def signup(**kw):
-    ReqUtil.not_null_params('name', 'phone', 'avatar_url', 'avatar_url_origin', 'gender', 'password', **kw)
+@api.route('/account/signUp', methods=['POST'])
+def signup():
+    req = request.get_json()
+    ReqUtil.not_null_params('name', 'phone', 'avatar_url', 'avatar_url_origin', 'gender', 'password', **req)
 
-    name = kw.get('name')
-    phone = kw.get('phone')
-    avatar_url = kw.get('avatar_url')
-    avatar_url_origin = kw.get('avatar_url_origin')
-    gender = kw.get('gender')
-    password = kw.get('password')
+    name = req.get('name')
+    phone = req.get('phone')
+    avatar_url = req.get('avatar_url')
+    avatar_url_origin = req.get('avatar_url_origin')
+    gender = req.get('gender')
+    password = req.get('password')
 
     added = AccountService.add_new_user(name, phone, avatar_url, avatar_url_origin, gender, password)
     if added:
@@ -71,8 +73,9 @@ def signup(**kw):
 
 
 # 用户退出
-@post('/api/v1/account/signOut', auth=True)
-def signout(request):
+@api.route('/account/signOut', methods=['POST'])
+@auth_required
+def sign_out():
     user = request.__user__
     AccountService.expire_session(user.id, user.device)
 

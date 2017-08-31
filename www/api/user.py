@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
+from flask import request
+from . import api, auth_required
 from common.enums import VCardInfoType
-from corweb import get, post
 from services.follow_service import FollowService
 from services.user_service import UserService
 from utils.req_util import ReqUtil
@@ -10,8 +11,9 @@ from utils.resp_util import RespUtil
 
 
 # 获取用户信息
-@get('/api/v1/user/vCard/{uid}', auth=True)
-def vCard(request, *, uid):
+@api.route('/user/vCard/<uid>', methods=['GET'])
+@auth_required
+def vCard(uid):
     ru = request.__user__
     user = UserService.get_user(uid)
     if user is None:
@@ -42,14 +44,16 @@ def vCard(request, *, uid):
 
 
 # 更新用户信息
-@post('/api/v1/user/vCard', auth=True)
-def update_vcard(request, **kw):
-    ReqUtil.not_null_params('type', 'value', **kw)
+@api.route('/user/vCard', methods=['POST'])
+@auth_required
+def update_vcard():
+    req = request.get_json()
+    ReqUtil.not_null_params('type', 'value', **req)
 
-    v_type = kw['type']
+    v_type = req['type']
     user = request.__user__
 
-    value = kw['value']
+    value = req['value']
 
     vCard_type = VCardInfoType(v_type)
     if vCard_type == VCardInfoType.AVATAR:
@@ -85,8 +89,13 @@ def update_vcard(request, **kw):
 
 
 # 搜索用户
-@post('/api/v1/user/search', auth=True)
-def search_users(request, *, keyword):
+@api.route('/user/search', methods=['POST'])
+@auth_required
+def search_users():
+    req = request.get_json()
+    ReqUtil.not_null_params('keyword', **req)
+    keyword = req.get('keyword')
+
     users = UserService.search_users(keyword)
     arr = []
 

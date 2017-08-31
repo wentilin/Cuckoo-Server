@@ -23,4 +23,4 @@ configs = {
 if configs['debug']:
     configs['resource_path'] = '/Users/wentilin/Desktop/cuckoo_server/resource'
     configs['server']['host'] = '192.168.1.101'
-    configs['server']['port'] = 9001
+    configs['server']['port'] = 9000

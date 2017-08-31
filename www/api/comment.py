@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
-
-from corweb import post
+from flask import request
+from . import api, auth_required
 from utils.req_util import ReqUtil
 from models import FeedComment
 from services.feed_comment_service import FeedCommentService
 from utils.resp_util import RespUtil
 
-@post('/api/v1/comment/create', auth=True)
-def create_comment(request, **kw):
-    ReqUtil.not_null_params('fid', 'content', **kw)
 
-    fid = kw['fid']
-    content = kw['content']
-    toUid = kw['toUid']
-    toUname = kw['toUname']
+@api.route('/comment/create', methods=['POST'])
+@auth_required
+def create_comment():
+    req = request.get_json()
+    ReqUtil.not_null_params('fid', 'content', **req)
+
+    fid = req['fid']
+    content = req['content']
+    toUid = req['toUid']
+    toUname = req['toUname']
     user = request.__user__
 
     comment = FeedComment(fid=fid,
@@ -30,23 +33,27 @@ def create_comment(request, **kw):
     return RespUtil.ok_response(data=_build_comment(new_comment))
 
 
-@post('/api/v1/comment/delete', auth=True)
-def delete_comment(**kw):
-    ReqUtil.not_null_params('cid', **kw)
+@api.route('/comment/delete', methods=['POST'])
+@auth_required
+def delete_comment():
+    req = request.get_json()
+    ReqUtil.not_null_params('cid', **req)
 
-    cid = kw['cid']
+    cid = req['cid']
 
     FeedCommentService.delete_comment(cid)
     return RespUtil.ok_response()
 
 
-@post('/api/v1/comment/list', auth=True)
-def comment_list(**kw):
-    ReqUtil.not_null_params('fid', 'page', 'size',  **kw)
+@api.route('/comment/list', methods=['POST'])
+@auth_required
+def comment_list():
+    req = request.get_json()
+    ReqUtil.not_null_params('fid', 'page', 'size',  **req)
 
-    fid = kw['fid']
-    page = kw['page']
-    size = kw['size']
+    fid = req['fid']
+    page = req['page']
+    size = req['size']
 
     comments = FeedCommentService.get_comments(fid, page, size)
 
@@ -76,6 +83,7 @@ def _build_comment_list(page, comments):
 
     return data
 
+
 def _build_comment(comment):
     item = {
         'id': comment.id,
@@ -90,6 +98,3 @@ def _build_comment(comment):
     }
 
     return item
-
-
-

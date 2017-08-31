@@ -5,7 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from contextlib import contextmanager
 
-engine = create_engine('mysql+pymysql://www-data:www-data@localhost:3306/cuckoodb?charset=utf8mb4', pool_size=100)
+engine = create_engine('mysql+pymysql://www-data:www-data@localhost:3306/cuckoodb?charset=utf8mb4',
+                       pool_size=100,
+                       pool_recycle=3600)
 DBSession = sessionmaker(bind=engine)
 
 db_session = scoped_session(sessionmaker(autocommit=False,

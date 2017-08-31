@@ -3,6 +3,7 @@
 
 import config_default
 
+
 class Dict(dict):
     def __init__(self, names=(), values=(), **kw):
         super(Dict, self).__init__(**kw)
@@ -14,8 +15,10 @@ class Dict(dict):
             return self[key]
         except KeyError:
             raise AttributeError(r"Dict object has no attribute '%s'" % key)
+
     def __setattr__(self, key, value):
         self[key] = value
+
 
 def merge(defaults, override):
     r = {}
@@ -44,4 +47,3 @@ except ImportError:
     pass
 
 configs = toDict(configs)
-print('configs------>%s' % configs)

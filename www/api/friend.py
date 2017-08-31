@@ -1,39 +1,52 @@
 #!/usr/bin/env python3
 # _*_ coding: utf-8 _*_
 
-from corweb import post
+from flask import request
+from . import api, auth_required
 from services.follow_service import FollowService
 from utils.req_util import ReqUtil
 from utils.resp_util import RespUtil
 
 
 # 关注
-@post('/api/v1/friend/follow', auth=True)
+@api.route('/friend/follow', methods=['POST'])
+@auth_required
 def follow(request, *, follow_uid):
+    req = request.get_json()
+    ReqUtil.not_null_params('follow_uid', **req)
+    follow_uid = req.get('follow_uid')
     user = request.__user__
+
     FollowService.follow(user.id, follow_uid)
 
     return RespUtil.ok_response()
 
 
 # 取消关注
-@post('/api/v1/friend/unFollow', auth=True)
-def un_follow(request, *, follow_uid):
+@api.route('/friend/unFollow', methods=['POST'])
+@auth_required
+def un_follow():
+    req = request.get_json()
+    ReqUtil.not_null_params('follow_uid', **req)
+    follow_uid = req.get('follow_uid')
     user = request.__user__
+
     FollowService.un_follow(user.id, follow_uid)
 
     return RespUtil.ok_response()
 
 
 # 获取关注列表
-@post('/api/v1/friend/followers', auth=True)
-def followers(request, **kw):
-    ReqUtil.not_null_params('page', 'size', **kw)
+@api.route('/friend/followers', methods=['POST'])
+@auth_required
+def followers():
+    req = request.get_json()
+    ReqUtil.not_null_params('page', 'size', **req)
 
-    page = kw['page']
-    size = kw['size']
+    page = req['page']
+    size = req['size']
     user = request.__user__
-    uid = kw.get('uid', user.id)
+    uid = req.get('uid', user.id)
 
     arr = []
 
@@ -61,14 +74,16 @@ def followers(request, **kw):
 
 
 # 获取粉丝列表
-@post('/api/v1/friend/followees', auth=True)
-def followees(request, **kw):
-    ReqUtil.not_null_params('page', 'size', **kw)
+@api.route('/friend/followees', methods=['POST'])
+@auth_required
+def followees():
+    req = request.get_json()
+    ReqUtil.not_null_params('page', 'size', **req)
 
-    page = kw.get('page')
-    size = kw.get('size')
+    page = req.get('page')
+    size = req.get('size')
     user = request.__user__
-    uid = kw.get('uid', user.id)
+    uid = req.get('uid', user.id)
 
     arr = []
 
