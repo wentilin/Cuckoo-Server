@@ -116,3 +116,15 @@ CREATE TABLE `feed_vote` (
   KEY `idx_fid` (`fid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `attachment` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) NOT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb4 NOT NULL COMMENT '存在本地的名称',
+  `filename` varchar(64) CHARACTER SET utf8mb4 NOT NULL,
+  `extension` varchar(8) NOT NULL,
+  `size` int(11) NOT NULL,
+  `cts` real DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_uid` (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+

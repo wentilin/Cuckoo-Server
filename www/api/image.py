@@ -6,7 +6,9 @@ import time
 import uuid
 from PIL import Image
 
-from flask import request, send_from_directory, abort
+from flask import request, send_from_directory, abort, redirect, url_for
+
+from services.user_service import UserService
 from . import img_api
 from config import configs
 from utils.encode_util import EncodeUtil
@@ -60,3 +62,12 @@ def get_image(id):
         return send_from_directory(file_path, id, as_attachment=True)
     else:
         abort(404)
+
+# 根据userId获取图片
+@img_api.route('/image/avatar/<uid>', methods=['GET'])
+def get_avatar(uid):
+    user = UserService.get_user(uid)
+    if user is None:
+        abort(404)
+
+    return redirect(user.avatarUrl)

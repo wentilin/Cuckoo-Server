@@ -61,4 +61,4 @@ def do_auth(request, auth_code, date):
 
     return True
 
-from api import account, comment, feed, friend, image, user
+from api import account, comment, feed, friend, image, user, attachment

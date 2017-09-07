@@ -2,7 +2,7 @@
 # _*_ coding: utf-8 _*_
 
 configs = {
-    'debug': False,
+    'debug': True,
     'server': {
         'host': '127.0.0.1',
         'port': 9000
@@ -22,5 +22,5 @@ configs = {
 
 if configs['debug']:
     configs['resource_path'] = '/Users/wentilin/Desktop/cuckoo_server/resource'
-    configs['server']['host'] = '192.168.1.101'
+    configs['server']['host'] = '192.168.1.102'
     configs['server']['port'] = 9000

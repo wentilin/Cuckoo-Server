@@ -75,5 +75,17 @@ CALL Pro_ColumnWork('feed_comment', 'toUid', 1, 'bigint(20) DEFAULT 0');
 -- `feed_comment`表增加字段`toUname`
 CALL Pro_ColumnWork('feed_comment', 'toUname', 1, 'varchar(64) DEFAULT NULL');
 
+-- 增加文件表 2017-09-01 16:26
+CREATE TABLE IF NOT EXISTS `attachment` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) NOT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb4 NOT NULL COMMENT '存在本地的名称',
+  `filename` varchar(64) CHARACTER SET utf8mb4 NOT NULL,
+  `extension` varchar(8) NOT NULL,
+  `size` int(11) NOT NULL,
+  `cts` real DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_uid` (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 

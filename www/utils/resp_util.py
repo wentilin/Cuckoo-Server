@@ -15,7 +15,7 @@ class RespUtil(object):
 
     @staticmethod
     def error_response(code, msg):
-        return jsonify(code=200, msg='OK')
+        return jsonify(code=code, msg=msg)
 
     @staticmethod
     def built_user_response(user, seesion_id):

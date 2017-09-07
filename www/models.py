@@ -107,3 +107,15 @@ class FeedVote(Base):
     uname = Column(String(50))
     avatarUrl = Column(String(128))
     cts = Column(DateTime, default=int_time)
+
+
+class Attachment(Base):
+    __tablename__ = 'attachment'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    uid = Column(BigInteger)
+    name = Column(String(50))
+    filename = Column(String(50))
+    extension = Column(String(8))
+    size = Column(Integer)
+    cts = Column(DateTime, default=int_time)

@@ -14,6 +14,7 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
 
+
 @contextmanager
 def session_scope():
     session = db_session()
