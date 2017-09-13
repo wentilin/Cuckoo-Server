@@ -46,11 +46,12 @@ def attachment_upload():
     cap = cv2.VideoCapture(file_path)
     img_name = EncodeUtil.md5(str(uuid.uuid4()) + str(time.time())) + '.jpg'
     img_path = os.path.join(configs.resource_path, img_name)
+    size = (300, 200)
     if cap.isOpened():
         ret, image = cap.read()
         (h, w) = image.shape[:2]
         center = (w / 2, h / 2)
-
+        size = (h, w)
         # 执行旋转
         M = cv2.getRotationMatrix2D(center, -90, 1.0)
         rotated_img = cv2.warpAffine(image, M, (w, h))
@@ -59,7 +60,7 @@ def attachment_upload():
 
     cap.release()
 
-    cover_img = 'http://' + request.host + '/image/' + img_name
+    cover_img = 'http://' + request.host + '/image/' + img_name + '?' + str(size[0]) + 'x' + str(size[1])
     return RespUtil.ok_response({'file_id': a.id, 'file_type': file_ext, 'cover_img': cover_img})
 
 
