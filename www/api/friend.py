@@ -11,7 +11,7 @@ from utils.resp_util import RespUtil
 # 关注
 @api.route('/friend/follow', methods=['POST'])
 @auth_required
-def follow(request, *, follow_uid):
+def follow():
     req = request.get_json()
     ReqUtil.not_null_params('follow_uid', **req)
     follow_uid = req.get('follow_uid')
