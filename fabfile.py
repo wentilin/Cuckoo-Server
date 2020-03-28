@@ -8,7 +8,7 @@ from fabric.api import *
 
 env.user = 'ubuntu'
 env.sudo_user = 'root'
-env.hosts = ['ec2-13-59-42-165.us-east-2.compute.amazonaws.com']
+env.hosts = ['ec2-13-58-122-97.us-east-2.compute.amazonaws.com']
 db_user = 'www-data'
 db_password = 'www-data'
 
@@ -56,9 +56,8 @@ def deploy():
         sudo('chown www-data:www-data www')
         sudo('chown -R www-data:www-data %s' % newdir)
 
-    #p = raw_input('Input mysql root password: ')
-    #with cd(_REMOTE_SQL_UPDATE_DIR):
-    #    sudo('mysql -u root -p < %s' % (_SQL_UPDATE_FILE))
+    with cd(_REMOTE_SQL_UPDATE_DIR):
+       sudo('mysql -u root -p < %s' % (_SQL_UPDATE_FILE))
 
     with settings(warn_only=True):
         sudo('supervisorctl stop cuckoo')
